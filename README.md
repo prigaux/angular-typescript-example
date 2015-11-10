@@ -28,6 +28,14 @@ npm start
 ./node_modules/.bin/tsd update -o -s
 ````
 
+## Browser
+
+### Readable stack trace
+
+When AngularJS catch an exception, it logs it in console.
+* chromium: since [version 42](https://code.google.com/p/chromium/issues/detail?id=357958), the stack trace correctly handles typescript.
+* firefox: no good solution.
+
 ## Use atom editor to modify typescript code
 
 On ubuntu:
