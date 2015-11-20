@@ -10,7 +10,10 @@ class TodoListController {
     new Todo('build an angular app', false),
   ];
 
-  constructor(private helpers: HelpersService, private $q: angular.IQService) {
+  constructor(private helpers: HelpersService, private $q: angular.IQService, private $log: angular.ILogService, private $scope: angular.IRootScopeService) {
+    $scope.$watch(() => this.newTodoText, (v) => {
+      $log.warn("newTodoText is now ", v);
+    });
   }
 
   private _replacePostalCode = (text: string) : angular.IPromise<string> => {
