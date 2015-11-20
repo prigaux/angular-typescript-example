@@ -13,7 +13,7 @@ class TodoListController {
   constructor(private helpers : HelpersService, private $q : angular.IQService) {
   }
 
-  private _replacePostalCode(text : string) : angular.IPromise<string> {
+  private _replacePostalCode = (text : string) : angular.IPromise<string> => {
     let m = text.match(/(.*)([0-9]{5})(.*)/);
     if (m) {
       let [, before, postalcode, after] = m;
@@ -26,20 +26,20 @@ class TodoListController {
     } else {
         return this.$q.resolve(text);
     }
-  }
+  };
 
-  add() {
+  add = () => {
     this._replacePostalCode(this.newTodoText).then((text) => {
       this.todos.push(new Todo(text, false));
       this.newTodoText = '';
     });
-  }
+  };
 
-  remaining() {
+  remaining = () => {
     return this.todos.filter((myApp) => !myApp.done);
   };
 
-  archive() {
+  archive = () => {
     this.todos = this.remaining();
-  }
+  };
 }
