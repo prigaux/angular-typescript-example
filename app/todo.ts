@@ -1,19 +1,19 @@
 class Todo {
-  constructor(public text : string, public done : boolean) {
+  constructor(public text: string, public done: boolean) {
   }
 }
 
 class TodoListController {
-  newTodoText : string;
+  newTodoText: string;
   todos = [
     new Todo('learn angular', true),
     new Todo('build an angular app', false),
   ];
 
-  constructor(private helpers : HelpersService, private $q : angular.IQService) {
+  constructor(private helpers: HelpersService, private $q: angular.IQService) {
   }
 
-  private _replacePostalCode = (text : string) : angular.IPromise<string> => {
+  private _replacePostalCode = (text: string) : angular.IPromise<string> => {
     let m = text.match(/(.*)([0-9]{5})(.*)/);
     if (m) {
       let [, before, postalcode, after] = m;
