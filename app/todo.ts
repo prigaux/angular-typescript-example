@@ -10,7 +10,7 @@ class TodoListController {
     new Todo('build an angular app', false),
   ];
 
-  constructor(private helpers: HelpersService, private $q: angular.IQService, private $log: angular.ILogService, private $scope: angular.IRootScopeService) {
+  constructor(private helpers: HelpersService.T, private $q: angular.IQService, private $log: angular.ILogService, private $scope: angular.IRootScopeService) {
     $scope.$watch(() => this.newTodoText, (v) => {
       $log.warn("newTodoText is now ", v);
     });
