@@ -10,7 +10,7 @@ class TodoListController {
     new Todo('build an angular app', false),
   ];
 
-  constructor(private helpers : HelpersService, private $q : angular.IQService) {
+  constructor(private helpers : HelpersService.T, private $q : angular.IQService) {
   }
 
   private _replacePostalCode(text : string) : angular.IPromise<string> {
