@@ -2,4 +2,4 @@
 
 angular.module('myApp', []);
 angular.module('myApp').service('helpers', HelpersService.create);
-angular.module('myApp').controller('todoListController', TodoListController);
+angular.module('myApp').controller('todoListController', TodoListController.create);

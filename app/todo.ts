@@ -3,46 +3,49 @@ class Todo {
   }
 }
 
-class TodoListController {
-  newTodoText: string;
-  todos = [
-    new Todo('learn angular', true),
-    new Todo('build an angular app', false),
-  ];
+namespace TodoListController {
+export function create(helpers: HelpersService.T, $q: angular.IQService, $log: angular.ILogService, $scope: angular.IRootScopeService) {
+  let o = helpers.assign($scope, {
+      newTodoText: '',
+      todos: [
+        new Todo('learn angular', true),
+        new Todo('build an angular app', false),
+      ],
+  });
 
-  constructor(private helpers: HelpersService.T, private $q: angular.IQService, private $log: angular.ILogService, private $scope: angular.IRootScopeService) {
-    $scope.$watch(() => this.newTodoText, (v) => {
+  // it could be simply: o.$watch('newTodoText', ...) which is sometimes simpler
+  o.$watch(() => o.newTodoText, (v) => {
       $log.warn("newTodoText is now ", v);
-    });
-  }
+  });
 
-  private _replacePostalCode = (text: string) : angular.IPromise<string> => {
+  function _replacePostalCode(text: string): angular.IPromise<string> {
     let m = text.match(/(.*)([0-9]{5})(.*)/);
     if (m) {
       let [, before, postalcode, after] = m;
-      return this.helpers.postalcode2towns(postalcode).then(
+      return helpers.postalcode2towns(postalcode).then(
         (towns) => towns && towns[0],
         (err) => undefined
       ).then((town) =>
         before + (town || postalcode) + after
       );
     } else {
-        return this.$q.resolve(text);
+        return $q.resolve(text);
     }
-  };
+  }
 
-  add = () => {
-    this._replacePostalCode(this.newTodoText).then((text) => {
-      this.todos.push(new Todo(text, false));
-      this.newTodoText = '';
+  function add() {
+    _replacePostalCode(o.newTodoText).then((text) => {
+      o.todos.push(new Todo(text, false));
+      o.newTodoText = '';
     });
-  };
+  }
+  function remaining() {
+    return o.todos.filter((myApp) => !myApp.done);
+  }
 
-  remaining = () => {
-    return this.todos.filter((myApp) => !myApp.done);
-  };
-
-  archive = () => {
-    this.todos = this.remaining();
-  };
+  function archive() {
+    o.todos = remaining();
+  }
+  return helpers.assign(o, { add, remaining, archive });
+};
 }
