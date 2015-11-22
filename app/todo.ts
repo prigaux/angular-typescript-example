@@ -3,43 +3,44 @@ class Todo {
   }
 }
 
-class TodoListController {
-  newTodoText : string;
-  todos = [
+function TodoListController(helpers : HelpersService.T, $q : angular.IQService) {
+  let newTodoText : string;
+  let todos = [
     new Todo('learn angular', true),
     new Todo('build an angular app', false),
   ];
+  let $scope = { archive, remaining, add, todos, newTodoText };
 
-  constructor(private helpers : HelpersService.T, private $q : angular.IQService) {
-  }
-
-  private _replacePostalCode(text : string) : angular.IPromise<string> {
+  function _replacePostalCode(text : string) : angular.IPromise<string> {
     let m = text.match(/(.*)([0-9]{5})(.*)/);
     if (m) {
       let [, before, postalcode, after] = m;
-      return this.helpers.postalcode2towns(postalcode).then(
+      return helpers.postalcode2towns(postalcode).then(
         (towns) => towns && towns[0],
         (err) => undefined
       ).then((town) =>
         before + (town || postalcode) + after
       );
     } else {
-        return this.$q.resolve(text);
+        return $q.resolve(text);
     }
   }
 
-  add() {
-    this._replacePostalCode(this.newTodoText).then((text) => {
-      this.todos.push(new Todo(text, false));
-      this.newTodoText = '';
+  function add() {
+    console.log($scope.newTodoText);
+    _replacePostalCode($scope.newTodoText).then((text) => {
+      $scope.todos.push(new Todo(text, false));
+      $scope.newTodoText = '';
     });
   }
 
-  remaining() {
-    return this.todos.filter((myApp) => !myApp.done);
+  function remaining() {
+    return $scope.todos.filter((myApp) => !myApp.done);
   };
 
-  archive() {
-    this.todos = this.remaining();
+  function archive() {
+    $scope.todos = remaining();
   }
+
+  return $scope;
 }
